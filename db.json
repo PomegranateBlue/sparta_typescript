@@ -1,23 +1,8 @@
 {
   "todos": [
     {
-      "id": "1",
-      "title": "Learn React",
-      "completed": false
-    },
-    {
-      "id": "2",
-      "title": "Learn Redux",
-      "completed": false
-    },
-    {
-      "id": "3",
-      "title": "Learn React Router",
-      "completed": false
-    },
-    {
-      "id": "131c9534-9e88-4f79-8687-8e51ea830973",
-      "title": "테스트",
+      "id": "98f20875-65ff-448b-9f44-cc6797819cbd",
+      "title": "asdasdasda",
       "completed": false
     }
   ]

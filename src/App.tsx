@@ -104,7 +104,7 @@ function TodoItem({
       <br></br>
       <div>id:{id}</div>
       <div onClick={() => onToggleClick({ id, completed })}>title:{title}</div>
-      <div>completed:{completed}</div>
+      <div>completed:{`${completed}`}</div>
       <button onClick={() => onDeleteClick(id)}>삭제</button>
       <br></br>
     </div>
