@@ -1,8 +1,8 @@
 import "./App.css";
-import { type Todo, getTodos } from "./components/todos";
+import { Todo, getTodos, ToggleTodo } from "./types/todos";
 import { useState, useEffect } from "react";
+import TodoList from "./components/TodoList";
 
-type ToggleTodo = Omit<Todo, "title">;
 function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   useEffect(() => {
@@ -55,58 +55,19 @@ function App() {
   };
 
   return (
-    <>
+    <div>
+      <input
+        className="rounded-md border-[3px] border-white"
+        type="text"
+        value={title}
+        onChange={handleTitleChange}
+      />
+      <button onClick={handleAddTodo}>입력</button>
       <TodoList
         todoList={todoList}
         onDeleteClick={handleDeleteTodo}
         onToggleClick={handleToggleTodo}
       />
-      <input type="text" value={title} onChange={handleTitleChange} />
-      <button onClick={handleAddTodo}>입력</button>
-    </>
-  );
-}
-type TodoListProps = {
-  todoList: Todo[];
-  onDeleteClick: (id: Todo["id"]) => void;
-  onToggleClick: (toggleTodo: ToggleTodo) => void;
-};
-
-function TodoList({ todoList, onDeleteClick, onToggleClick }: TodoListProps) {
-  return (
-    <>
-      {todoList.map((todo) => (
-        <TodoItem
-          key={todo.id}
-          {...todo}
-          onDeleteClick={onDeleteClick}
-          onToggleClick={onToggleClick}
-        />
-      ))}
-    </>
-  );
-}
-
-type TodoItemProps = Todo & {
-  onDeleteClick: (id: Todo["id"]) => void;
-  onToggleClick: (toggleTodo: ToggleTodo) => void;
-};
-
-function TodoItem({
-  id,
-  title,
-  completed,
-  onDeleteClick,
-  onToggleClick,
-}: TodoItemProps) {
-  return (
-    <div>
-      <br></br>
-      <div>id:{id}</div>
-      <div onClick={() => onToggleClick({ id, completed })}>title:{title}</div>
-      <div>completed:{`${completed}`}</div>
-      <button onClick={() => onDeleteClick(id)}>삭제</button>
-      <br></br>
     </div>
   );
 }

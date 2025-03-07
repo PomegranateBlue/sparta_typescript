@@ -3,6 +3,13 @@ export type Todo = {
   title: string;
   completed: boolean;
 };
+export type ToggleTodo = Omit<Todo, "title">;
+
+export type TodoListProps = {
+  todoList: Todo[];
+  onDeleteClick: (id: Todo["id"]) => void;
+  onToggleClick: (toggleTodo: ToggleTodo) => void;
+};
 
 export async function getTodos() {
   const response = await fetch("http://localhost:5000/todos");
