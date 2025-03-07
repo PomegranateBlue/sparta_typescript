@@ -1,6 +1,8 @@
 import "./App.css";
 import { type Todo, getTodos } from "./components/todos";
 import { useState, useEffect } from "react";
+
+type ToggleTodo = Omit<Todo, "title">;
 function App() {
   const [todoList, setTodoList] = useState<Todo[]>([]);
   useEffect(() => {
@@ -34,36 +36,76 @@ function App() {
     setTodoList((prev) => prev.filter((todo) => todo.id !== id));
   };
 
+  const handleToggleTodo = async ({ id, completed }: ToggleTodo) => {
+    await fetch(`http://localhost:5000/todos/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify({ completed: !completed }),
+    });
+    setTodoList((prev) =>
+      prev.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            completed: !completed,
+          };
+        }
+        return todo;
+      }),
+    );
+  };
+
   return (
     <>
-      <TodoList todoList={todoList} />
+      <TodoList
+        todoList={todoList}
+        onDeleteClick={handleDeleteTodo}
+        onToggleClick={handleToggleTodo}
+      />
       <input type="text" value={title} onChange={handleTitleChange} />
       <button onClick={handleAddTodo}>입력</button>
     </>
   );
 }
-type TodoListProps = { todoList: Todo[] };
+type TodoListProps = {
+  todoList: Todo[];
+  onDeleteClick: (id: Todo["id"]) => void;
+  onToggleClick: (toggleTodo: ToggleTodo) => void;
+};
 
-function TodoList({ todoList }: TodoListProps) {
+function TodoList({ todoList, onDeleteClick, onToggleClick }: TodoListProps) {
   return (
     <>
       {todoList.map((todo) => (
-        <TodoItem key={todo.id} {...todo} />
+        <TodoItem
+          key={todo.id}
+          {...todo}
+          onDeleteClick={onDeleteClick}
+          onToggleClick={onToggleClick}
+        />
       ))}
     </>
   );
 }
 
-type TodoItemProps = Todo;
+type TodoItemProps = Todo & {
+  onDeleteClick: (id: Todo["id"]) => void;
+  onToggleClick: (toggleTodo: ToggleTodo) => void;
+};
 
-function TodoItem({ id, title, completed,onDeleteClick }: TodoItemProps) {
+function TodoItem({
+  id,
+  title,
+  completed,
+  onDeleteClick,
+  onToggleClick,
+}: TodoItemProps) {
   return (
     <div>
       <br></br>
       <div>id:{id}</div>
-      <div>title:{title}</div>
+      <div onClick={() => onToggleClick({ id, completed })}>title:{title}</div>
       <div>completed:{completed}</div>
-      <button onClick={handleDeleteTodo}>삭제</button>
+      <button onClick={() => onDeleteClick(id)}>삭제</button>
       <br></br>
     </div>
   );
